@@ -25,3 +25,7 @@ body{
 #footer {
 	text-align: center;
 }
+
+.titlepanel {
+	border: 10px outset #333;
+}

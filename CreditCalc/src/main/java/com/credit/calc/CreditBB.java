@@ -1,45 +1,61 @@
 package com.credit.calc;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
+import java.util.ResourceBundle;
+
+import javax.annotation.PostConstruct;
+import javax.faces.annotation.ManagedProperty;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+
 
 @Named
-@RequestScoped
+@ViewScoped
 //@SessionScoped
-public class CreditBB {
-	private String amount;
-	private String years;
-	private String interest;
+public class CreditBB implements Serializable {
+	private Double amount;
+	private Double years;
+	private Double interest;
 	private Double installment;
+	
+	// Resource injected
+	@Inject
+	@ManagedProperty("#{txtCalcErr}")
+	private ResourceBundle txtCalcErr;
+
+	// Resource injected
+	@Inject
+	@ManagedProperty("#{txtCalc}")
+	private ResourceBundle txtCalc;
 
 	@Inject
 	FacesContext ctx;
 
-	public String getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
-	public String getYears() {
+	public Double getYears() {
 		return years;
 	}
 
-	public void setYears(String years) {
+	public void setYears(Double years) {
 		this.years = years;
 	}
 
-	public String getInterest() {
+	public Double getInterest() {
 		return interest;
 	}
 
-	public void setInterest(String interest) {
+	public void setInterest(Double interest) {
 		this.interest = interest;
 	}
 
@@ -51,28 +67,16 @@ public class CreditBB {
 		this.installment = installment;
 	}
 
-	public boolean doTheMath() {
+	public String calc() {
+		FacesContext ctx = FacesContext.getCurrentInstance();
 		try {
-			double years = Double.parseDouble(this.years);
-			double amount = Double.parseDouble(this.amount);
-			double interest = Double.parseDouble(this.interest);
-
 			installment = (amount + (amount * interest / 100)) / (years * 12);
 			installment = Math.round(installment * 100.0) / 100.0;
 
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Operacja wykonana poprawnie", null));
-			return true;
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, txtCalc.getString("result") + ": " + installment, null));
 		} catch (Exception e) {
 			ctx.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Błąd podczas przetwarzania parametrów", null));
-			return false;
-		}
-	}
-
-	// Go to "results" if ok
-	public String calc() {
-		if (doTheMath()) {
-			return "results";
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR " + e.getMessage(), null));
 		}
 		return null;
 	}

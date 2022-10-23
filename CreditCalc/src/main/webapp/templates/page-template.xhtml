@@ -9,12 +9,12 @@
 <ui:composition template="/templates/main-template.xhtml">
 
 	<ui:define name="title">
-		JPDSI II - Kalkulator Kredytowy
+		#{txtMain.projectName}
 	</ui:define>
 
 	<ui:define name="content">
 
-		<p:panel header="JPDSI II" styleClass="bottom-space">Języki Programowania Dynamicznych Stron Internetowych II</p:panel>
+		<p:panel header="#{txtMain.projectTitle}" styleClass="bottom-space">#{txtMain.projectDescription}</p:panel>
 
 		<ui:insert name="pageContent"></ui:insert>
 

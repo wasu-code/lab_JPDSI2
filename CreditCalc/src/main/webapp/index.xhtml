@@ -17,18 +17,43 @@
 			
 			<h:form>
 			
-				<h:panelGrid columns="2" cellpadding="5" styleClass="bottom-space">
-					<p:outputLabel for="amount" value="kwota: " />
-					<p:inputText id="amount" value="#{creditBB.amount}" />
+				<h:panelGrid columns="3" cellpadding="5" styleClass="bottom-space">
+					<p:outputLabel for="amount" value="#{txtCalc.calcParam_amount} " />
+					<p:inputText id="amount" value="#{creditBB.amount}" 
+						required="true"
+						requiredMessage="#{txtCalcErr.calcParamRequired}"
+						converterMessage="#{txtCalcErr.calcParamIncorrect} #{txtCalc.calcParam_amount}" 
+						validatorMessage="#{txtCalc.calcValid_amount}" 
+						>
+						<f:validateDoubleRange minimum="500"/>
+					</p:inputText>
+					<p:message for="amount" />
 
-					<p:outputLabel for="years" value="na ile lat: " />
-					<p:inputText id="years" value="#{creditBB.years}" />
+					<p:outputLabel for="years" value="#{txtCalc.calcParam_years}" />
+					<p:inputText id="years" value="#{creditBB.years}" 
+						required="true"
+						requiredMessage="#{txtCalcErr.calcParamRequired}"
+						converterMessage="#{txtCalcErr.calcParamIncorrect} #{txtCalc.calcParam_years}" 
+						validatorMessage="#{txtCalc.calcValid_years}" 
+						>
+						<f:validateDoubleRange minimum="1"/>
+					</p:inputText>
+					<p:message for="years" />
 
-					<p:outputLabel for="interest" value="oprocentowanie: " />
-					<p:inputText id="interest" value="#{creditBB.interest}" />
-
-					<p:commandButton value="Oblicz ratę" action="#{creditBB.calc()}"
-						update=":#{p:component('msg')}" />
+					<p:outputLabel for="interest" value="#{txtCalc.calcParam_interest}" />
+					<p:inputText id="interest" value="#{creditBB.interest}" 
+						required="true"
+						requiredMessage="#{txtCalcErr.calcParamRequired}"
+						converterMessage="#{txtCalcErr.calcParamIncorrect} #{txtCalc.calcParam_interest}" 
+						validatorMessage="#{txtCalc.calcValid_interest}" 
+						>
+						<f:validateDoubleRange maximum="100"/>
+					</p:inputText>
+					<p:message for="interest" />
+					
+					<h:commandButton value="#{txtCalc.go}" action="#{creditBB.calc()}">
+						<f:ajax execute="@form" render="@form msg" />
+					</h:commandButton>
 				</h:panelGrid>
 			</h:form>
 			
